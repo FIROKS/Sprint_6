@@ -2,12 +2,10 @@ import allure
 import pytest
 
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 
 from pages.order_page import OrderPage
-from pages.base_page import BasePage
 from pages.main_page import MainPage
-from locators.order_page_locators import OrderPageLocators
+from data import Endpoints
 
 
 class TestOrderPage:
@@ -28,19 +26,19 @@ class TestOrderPage:
         ]
     )
     def test_order_success(self, name, surname, address, metro, phone, day, period, color, comment, enter_point):
-        self.driver.get('https://qa-scooter.praktikum-services.ru/')
         orderPage = OrderPage(self.driver)
-        basePage = BasePage(self.driver)
+        mainPage = MainPage(self.driver)
 
-        basePage.wait_for_load_page(MainPage.question_accordion)
-        basePage.click_on_cookie_button()
+        mainPage.go_to_page(Endpoints.MAIN_PAGE)
+        mainPage.wait_for_load_main_page()
+        orderPage.click_on_cookie_button()
         match enter_point:
             case 'nav':
-                basePage.click_on_order_in_nav()
+                orderPage.click_on_order_in_nav()
             case 'section':
-                basePage.click_on_order_in_section()
+                orderPage.click_on_order_in_section()
 
-        orderPage.wait_for_load_form()
+        orderPage.wait_for_load_order_page()
         orderPage.input_name(name)
         orderPage.input_surname(surname)
         orderPage.input_address(address)
@@ -64,27 +62,15 @@ class TestOrderPage:
     @allure.title('Переход на главную при клике на логотип "Самоката"')
     @allure.testcase('-', 'Если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»')
     def test_go_to_main_page(self):
-        self.driver.get('https://qa-scooter.praktikum-services.ru/order')
-        basePage = BasePage(self.driver)
+        orderPage = OrderPage(self.driver)
+        mainPage = MainPage(self.driver)
+        orderPage.go_to_page(Endpoints.ORDER_PAGE)
         
-        basePage.wait_for_load_page(OrderPageLocators.name_input)
-        basePage.click_on_scooter_logo()
-        basePage.wait_for_load_page(MainPage.question_accordion)
+        orderPage.wait_for_load_order_page()
+        orderPage.click_on_scooter_logo()
+        mainPage.wait_for_load_main_page()
 
-        assert self.driver.current_url == 'https://qa-scooter.praktikum-services.ru/'
-
-    @allure.title('Открытие страницы Дзена при клике на логотип Яндекса')
-    @allure.testcase('-', 'Если нажать на логотип Яндекса, в новом окне через редирект откроется главная страница Дзена.')
-    def test_go_to_main_page(self):
-        self.driver.get('https://qa-scooter.praktikum-services.ru')
-        basePage = BasePage(self.driver)
-        
-        basePage.wait_for_load_page(MainPage.question_accordion)
-        basePage.click_on_yandex_logo()
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        basePage.wait_for_load_page((By.XPATH, '//div[contains(@class, "dzen")]'))
-
-        assert self.driver.current_url == 'https://dzen.ru/?yredirect=true', 'Страница Дзена не открылась через редирект'
+        assert mainPage.get_current_url() == Endpoints.MAIN_PAGE
 
     @classmethod
     def teardown_class(cls):

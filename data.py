@@ -21,3 +21,7 @@ class MainPageQuestions:
         'OUTSIDE_MRR': 'Да, обязательно. Всем самокатов! И Москве, и Московской области.'
     }
 
+class Endpoints:
+    MAIN_PAGE = 'https://qa-scooter.praktikum-services.ru/'
+    ORDER_PAGE = 'https://qa-scooter.praktikum-services.ru/order'
+    DZEN_PAGE = 'https://dzen.ru/?yredirect=true'

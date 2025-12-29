@@ -22,10 +22,31 @@ class BasePage:
         except Exception:
             pass
 
-    @allure.step('Ждем загрузки страницы')
-    def wait_for_load_page(self, selector):
-        WebDriverWait(self.driver, 5).until(expected_conditions.visibility_of_element_located(selector))
+    def wait_for_load(self, selector):
+        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(selector))
+
+    def click_on_element(self, selector):
+        self.driver.find_element(*selector).click()
         
+    def fill_input(self, selector, value):
+        self.driver.find_element(*selector).send_keys(value)
+
+    def get_element_text(self, selector):
+        return self.driver.find_element(*selector).text
+    
+    def get_current_url(self):
+        return self.driver.current_url
+    
+    def switch_to_window(self, index):
+        self.driver.switch_to.window(self.driver.window_handles[index])
+
+    def wait_for_load_dzen(self):
+        self.wait_for_load((By.XPATH, '//div[contains(@class, "dzen")]'))
+    
+    @allure.step('Переходим на страницу - {endpoint}')
+    def go_to_page(self, endpoint):
+        self.driver.get(endpoint)
+    
     @allure.step('Кликаем по кнопке "Заказать" в шапке')
     def click_on_order_in_nav(self):
         self.driver.find_element(*self.order_button_in_nav).click()
@@ -41,4 +62,3 @@ class BasePage:
     @allure.step('Кликаем по лого Яндекса')
     def click_on_yandex_logo(self):
         self.driver.find_element(*self.yandex_logo).click()
-        
