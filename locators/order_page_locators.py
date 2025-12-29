@@ -13,4 +13,4 @@ class OrderPageLocators:
     comment_input = (By.XPATH, '//input[@placeholder="Комментарий для курьера"]')
     order_button = (By.XPATH, '//div[contains(@class, "Order_Buttons")]/button[text()="Заказать"]')
     order_accept_button = (By.XPATH, '//button[text()="Да"]')
-    order_number_popup = (By.XPATH, '//div[contains(text(), "Номер заказа:")]')
+    order_success_popup_button = (By.XPATH, '//div[contains(@class, "Order_NextButton")]/button[text()="Посмотреть статус"]')

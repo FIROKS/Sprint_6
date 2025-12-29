@@ -25,3 +25,19 @@ class Endpoints:
     MAIN_PAGE = 'https://qa-scooter.praktikum-services.ru/'
     ORDER_PAGE = 'https://qa-scooter.praktikum-services.ru/order'
     DZEN_PAGE = 'https://dzen.ru/?yredirect=true'
+
+ORDERDATA = [
+    ('Иван', 'Иванов', 'ул. Пушкина, 67', '1', '88888888888', '10', 'сутки', 'black', 'Комментарий'),
+    ('Федор', 'Васильев', 'ул. Новогодняя, 26', '2', '88005553535', '31', 'двое суток', 'grey', ''),
+]
+
+QUESTIONS_DATA= [
+    (0, 0, MainPageQuestions.ANSWERS['COST'], MainPageQuestions.QUESTIONS['COST']),
+    (1, 1, MainPageQuestions.ANSWERS['SEVERAL_SCOOTERS'], MainPageQuestions.QUESTIONS['SEVERAL_SCOOTERS']),
+    (2, 2, MainPageQuestions.ANSWERS['RENTAL_TIME'], MainPageQuestions.QUESTIONS['RENTAL_TIME']),
+    (3, 3, MainPageQuestions.ANSWERS['ORDER_FOR_TODAY'], MainPageQuestions.QUESTIONS['ORDER_FOR_TODAY']),
+    (4, 4, MainPageQuestions.ANSWERS['EXTEND_OR_RETURN'], MainPageQuestions.QUESTIONS['EXTEND_OR_RETURN']),
+    (5, 5, MainPageQuestions.ANSWERS['CHARGING_DELIVERY'], MainPageQuestions.QUESTIONS['CHARGING_DELIVERY']),
+    (6, 6, MainPageQuestions.ANSWERS['CANCEL_ORDER'], MainPageQuestions.QUESTIONS['CANCEL_ORDER']),
+    (7, 7, MainPageQuestions.ANSWERS['OUTSIDE_MRR'], MainPageQuestions.QUESTIONS['OUTSIDE_MRR']),
+]

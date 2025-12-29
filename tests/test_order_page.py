@@ -5,7 +5,7 @@ from selenium import webdriver
 
 from pages.order_page import OrderPage
 from pages.main_page import MainPage
-from data import Endpoints
+from data import Endpoints, ORDERDATA
 
 
 class TestOrderPage:
@@ -19,25 +19,17 @@ class TestOrderPage:
     @allure.description('Оформление заказа с корректными данными')
     @allure.testcase('-', 'Заказ самоката')
     @pytest.mark.parametrize(
-        "name, surname, address, metro, phone, day, period, color, comment, enter_point",
-        [
-            ('Иван', 'Иванов', 'ул. Пушкина, 67', '1', '88888888888', '10', 'сутки', 'black', 'Комментарий', 'nav'),
-            ('Федор', 'Васильев', 'ул. Новогодняя, 26', '2', '88005553535', '31', 'двое суток', 'grey', '', 'section'),
-        ]
+        "name, surname, address, metro, phone, day, period, color, comment",
+        ORDERDATA
     )
-    def test_order_success(self, name, surname, address, metro, phone, day, period, color, comment, enter_point):
+    def test_order_success(self, name, surname, address, metro, phone, day, period, color, comment):
         orderPage = OrderPage(self.driver)
         mainPage = MainPage(self.driver)
 
         mainPage.go_to_page(Endpoints.MAIN_PAGE)
         mainPage.wait_for_load_main_page()
         orderPage.click_on_cookie_button()
-        match enter_point:
-            case 'nav':
-                orderPage.click_on_order_in_nav()
-            case 'section':
-                orderPage.click_on_order_in_section()
-
+        orderPage.click_on_order_in_nav()
         orderPage.wait_for_load_order_page()
         orderPage.input_name(name)
         orderPage.input_surname(surname)
@@ -55,17 +47,29 @@ class TestOrderPage:
         orderPage.click_order_button()
         orderPage.wait_for_order_accept_popup_load()
         orderPage.click_order_accept_button()
-        orderPage.wait_for_order_number_load()
+        success_popup_button_text = orderPage.wait_for_order_success_popup()
         
-        assert True, 'Не удалось оформить заказ'
+        assert success_popup_button_text == 'Посмотреть статус', 'Не удалось оформить заказ'
+
+    def test_go_to_order_page_using_section_button(self):
+        orderPage = OrderPage(self.driver)
+        mainPage = MainPage(self.driver)
+    
+        mainPage.go_to_page(Endpoints.MAIN_PAGE)
+        mainPage.wait_for_load_main_page()
+        orderPage.click_on_cookie_button()
+        orderPage.click_on_order_in_section()
+        orderPage.wait_for_load_order_page()
+
+        assert orderPage.get_current_url() == Endpoints.ORDER_PAGE
 
     @allure.title('Переход на главную при клике на логотип "Самоката"')
     @allure.testcase('-', 'Если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»')
     def test_go_to_main_page(self):
         orderPage = OrderPage(self.driver)
         mainPage = MainPage(self.driver)
-        orderPage.go_to_page(Endpoints.ORDER_PAGE)
-        
+
+        orderPage.go_to_page(Endpoints.ORDER_PAGE)        
         orderPage.wait_for_load_order_page()
         orderPage.click_on_scooter_logo()
         mainPage.wait_for_load_main_page()

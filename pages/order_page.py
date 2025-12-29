@@ -79,6 +79,6 @@ class OrderPage(BasePage):
         super().click_on_element(OrderPageLocators.order_accept_button)
 
     @allure.step('Ждем отрисовки попапа с номером заказа')
-    def wait_for_order_number_load(self):
-        super().wait_for_load(OrderPageLocators.order_number_popup)
-        return True
+    def wait_for_order_success_popup(self):
+        super().wait_for_load(OrderPageLocators.order_success_popup_button)
+        return super().get_element_text(OrderPageLocators.order_success_popup_button)
